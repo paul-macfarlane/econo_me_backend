@@ -15,8 +15,8 @@ Then navigate to the [app directory](./app) and run the following to install all
 pipenv install --dev
 ```
 
-Finally, to start the API locally, with hot refresh, run the following:
+Finally, to start the API locally, navigate back up to the root directory and run the following:
 
 ```shell
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```

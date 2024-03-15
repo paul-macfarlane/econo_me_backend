@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter
 from pydantic import BaseModel
 
-from routers.transactions import router as transactions_router
+from app.routers.transactions import router as transactions_router
 
 app = FastAPI()
 

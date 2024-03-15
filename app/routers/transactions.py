@@ -1,93 +1,33 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends
+
+from app.models.transactions import Transaction, CreateTransaction, UpdateTransaction
+from app.services.transactions import get_transaction_service, TransactionService
 
 router = APIRouter()
 
 
-class CreateTransaction(BaseModel):
-    amount: float
-    date: str
-    categoryId: str
-    userId: str  # this should eventually come from jwt
-    description: str
+@router.get("", response_model=list[Transaction])
+def list_transactions(transaction_service: TransactionService = Depends(get_transaction_service)):
+    return transaction_service.list("1")  # TODO replace with real user id
 
 
-class UpdateTransaction(BaseModel):
-    amount: float | None
-    date: str | None
-    categoryId: str | None
-    userId: str | None  # this should eventually come from jwt
-    description: str | None
+@router.post("", response_model=Transaction, status_code=201)
+def create_transaction(create: CreateTransaction,
+                       transaction_service: TransactionService = Depends(get_transaction_service)):
+    return transaction_service.create("1", create)  # TODO replace with real user id
 
 
-class TransactionResponse(BaseModel):
-    id: str
-    amount: float
-    date: str
-    categoryId: str
-    userId: str
-    description: str
-    createdAt: str
-    modifiedAt: str
+@router.get("/{transaction_id}", response_model=Transaction)
+def get_transaction(transaction_id: str, transaction_service: TransactionService = Depends(get_transaction_service)):
+    return transaction_service.get_by_id("1", transaction_id)  # TODO replace with real user id
 
 
-@router.get("", response_model=list[TransactionResponse])
-def list_transactions():
-    return [{
-        "id": "1",
-        "amount": 100.0,
-        "date": "2021-01-01",
-        "categoryId": "1",
-        "userId": "1",
-        "description": "test",
-        "createdAt": "2021-01-01",
-        "modifiedAt": "2021-01-01"
-    }]
-
-
-@router.post("", response_model=TransactionResponse)
-def create_transaction(transaction: CreateTransaction):
-    return {
-        "id": "1",
-        "amount": transaction.amount,
-        "date": transaction.date,
-        "categoryId": transaction.categoryId,
-        "userId": transaction.userId,
-        "description": transaction.description,
-        "createdAt": "2021-01-01",
-        "modifiedAt": "2021-01-01"
-    }
-
-
-@router.get("/{transaction_id}", response_model=TransactionResponse)
-def get_transaction(transaction_id: str):
-    return {
-        "id": transaction_id,
-        "amount": 100.0,
-        "date": "2021-01-01",
-        "categoryId": "1",
-        "userId": "1",
-        "description": "test",
-        "createdAt": "2021-01-01",
-        "modifiedAt": "2021-01-01"
-    }
-
-
-@router.patch("/{transaction_id}", response_model=TransactionResponse)
-def update_transaction(transaction_id: str, transaction: UpdateTransaction):
-    # in a real implementation only the non-null fields would get set
-    return {
-        "id": transaction_id,
-        "amount": transaction.amount,
-        "date": transaction.date,
-        "categoryId": transaction.categoryId,
-        "userId": transaction.userId,
-        "description": transaction.description,
-        "createdAt": "2021-01-01",
-        "modifiedAt": "2021-01-01"
-    }
+@router.patch("/{transaction_id}", response_model=Transaction)
+def update_transaction(transaction_id: str, update: UpdateTransaction,
+                       transaction_service: TransactionService = Depends(get_transaction_service)):
+    return transaction_service.update("1", transaction_id, update)  # TODO replace with real user id
 
 
 @router.delete("/{transaction_id}", status_code=204)
-def delete_transaction(transaction_id: str):
-    return None
+def delete_transaction(transaction_id: str, transaction_service: TransactionService = Depends(get_transaction_service)):
+    return transaction_service.delete("1", transaction_id)  # TODO replace with real user id
