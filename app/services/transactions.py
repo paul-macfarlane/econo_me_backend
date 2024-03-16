@@ -1,25 +1,29 @@
 from fastapi import Depends
 from app.models.transactions import Transaction, CreateTransaction, UpdateTransaction
 from app.repositories.transactions import ITransactionRepository, TransactionRepository, get_transaction_repository
+from uuid import UUID
 
 
 class TransactionService:
     def __init__(self, transaction_repo: ITransactionRepository = Depends()):
         self.transaction_repo = transaction_repo
 
-    def list(self, user_id: str) -> list[Transaction]:
+    def list(self, user_id: UUID) -> list[Transaction]:
         return self.transaction_repo.list(user_id)
 
-    def get_by_id(self, user_id: str, transaction_id: str) -> Transaction:
+    def get_by_id(self, user_id: UUID, transaction_id: UUID) -> Transaction:
+        # TODO handle case where transaction is not found
         return self.transaction_repo.get_by_id(user_id, transaction_id)
 
-    def create(self, user_id: str, create: CreateTransaction) -> Transaction:
+    def create(self, user_id: UUID, create: CreateTransaction) -> Transaction:
         return self.transaction_repo.create(user_id, create)
 
-    def update(self, user_id: str, transaction_id: str, update: UpdateTransaction) -> Transaction:
+    def update(self, user_id: UUID, transaction_id: UUID, update: UpdateTransaction) -> Transaction:
+        # TODO handle case where transaction is not found
         return self.transaction_repo.update(user_id, transaction_id, update)
 
-    def delete(self, user_id: str, transaction_id: str) -> None:
+    def delete(self, user_id: UUID, transaction_id: UUID) -> None:
+        # TODO handle case where transaction is not found
         return self.transaction_repo.delete(user_id, transaction_id)
 
 
