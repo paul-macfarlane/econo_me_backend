@@ -28,6 +28,14 @@ Spin up the local db by running the following:
 docker-compose up -d
 ```
 
+You will then need to run the existing migrations to create the necessary tables in the database. To do this, navigate
+to /app and then run the
+following:
+
+```shell
+alembic upgrade head
+```
+
 Finally, to start the API locally, navigate back up to the root directory and run the following:
 
 ```shell

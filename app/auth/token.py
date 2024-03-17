@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 from uuid import UUID
@@ -7,8 +9,9 @@ from jose import JWTError, jwt
 
 from app.models.auth import Token
 
-# TODO These should be set as environment variables
-SECRET_KEY = "a very secret key"
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
