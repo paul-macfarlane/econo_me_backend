@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 from uuid import UUID
+from fastapi.security import HTTPBearer
 
 from jose import JWTError, jwt
 
@@ -10,6 +11,8 @@ from app.models.auth import Token
 SECRET_KEY = "a very secret key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+oauth2_scheme = HTTPBearer()
 
 
 def create_access_token(user_id: UUID, expires_delta: Optional[timedelta] = None) -> Token:
@@ -24,7 +27,6 @@ def create_access_token(user_id: UUID, expires_delta: Optional[timedelta] = None
     return Token(accessToken=encoded_jwt, tokenType="bearer")
 
 
-# TODO this might need to fetch the user from the database to check if the user exists
 def verify_token(token: str, credentials_exception) -> UUID:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

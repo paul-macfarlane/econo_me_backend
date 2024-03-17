@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -24,5 +25,5 @@ class Transaction(BaseModel):
     categoryId: UUID
     userId: UUID
     description: str
-    createdAt: str
-    modifiedAt: str
+    createdAt: datetime
+    modifiedAt: datetime

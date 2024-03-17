@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import Depends
 from abc import ABC, abstractmethod
 
@@ -8,6 +10,10 @@ from pydantic import EmailStr
 
 
 class IUserRepository(ABC):
+    @abstractmethod
+    def get_by_id(self, id: UUID) -> User | None:
+        pass
+
     @abstractmethod
     def get_by_email_include_password(self, email: EmailStr) -> DBUser | None:
         pass
@@ -24,6 +30,9 @@ class IUserRepository(ABC):
 class UserRepository(IUserRepository):
     def __init__(self, db: SessionLocal):
         self.db = db
+
+    def get_by_id(self, user_id: UUID) -> User | None:
+        return self.db.get(DBUser, user_id)
 
     def get_by_email_include_password(self, email: EmailStr) -> DBUser | None:
         return self.db.query(DBUser).filter(DBUser.email == email).first()

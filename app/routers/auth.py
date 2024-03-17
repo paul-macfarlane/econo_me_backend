@@ -1,11 +1,9 @@
 from fastapi import Depends, APIRouter
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from app.models.auth import Token, SignUp, Login
 from app.services.auth import AuthService, get_auth_service
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 @router.post("/login", response_model=Token)
