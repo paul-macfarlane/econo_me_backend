@@ -1,7 +1,7 @@
 from fastapi import Depends
 from app.database.db import SessionLocal, get_db
 from app.database.models.transactions import Transaction as DBTransaction
-from app.models.errors import ModelNotFoundError
+from app.models.errors import ModelNotFoundException
 from app.models.transactions import CreateTransaction, Transaction, UpdateTransaction
 from abc import ABC, abstractmethod
 from uuid import UUID
@@ -58,7 +58,7 @@ class TransactionRepository(ITransactionRepository):
     def update(self, user_id: UUID, transaction_id: UUID, update: UpdateTransaction) -> Transaction:
         db_transaction = self.get_by_id(user_id, transaction_id)
         if not db_transaction:
-            raise ModelNotFoundError("Transaction", str(transaction_id))
+            raise ModelNotFoundException("Transaction", str(transaction_id))
 
         db_transaction.amount = update.amount
         db_transaction.date = update.date

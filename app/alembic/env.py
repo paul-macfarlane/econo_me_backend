@@ -28,6 +28,7 @@ sys.path.append(str(ROOT_DIR))
 
 from app.database.db import Base
 from app.database.models.transactions import Transaction
+from app.database.models.users import User
 
 target_metadata = Base.metadata
 

@@ -34,6 +34,8 @@ Finally, to start the API locally, navigate back up to the root directory and ru
 uvicorn app.main:app --reload
 ```
 
+To view the API documentation, visit http://localhost:8000/docs in your browser.
+
 ### Migrations
 
 To create a new migration, navigate to the app directory and run the following:

@@ -11,6 +11,9 @@ asyncpg = "*"
 databases = "*"
 alembic = "*"
 psycopg2-binary = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = {extras = ["bcrypt"], version = "*"}
+email-validator = "*"
 
 [dev-packages]
 
