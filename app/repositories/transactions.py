@@ -1,6 +1,7 @@
 from fastapi import Depends
 from app.database.db import SessionLocal, get_db
 from app.database.models.transactions import Transaction as DBTransaction
+from app.models.errors import ModelNotFoundError
 from app.models.transactions import CreateTransaction, Transaction, UpdateTransaction
 from abc import ABC, abstractmethod
 from uuid import UUID
@@ -12,7 +13,7 @@ class ITransactionRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, user_id: UUID, transaction_id: UUID) -> Transaction:
+    def get_by_id(self, user_id: UUID, transaction_id: UUID) -> Transaction | None:
         pass
 
     @abstractmethod
@@ -28,7 +29,6 @@ class ITransactionRepository(ABC):
         pass
 
 
-# TODO: Replace fake implementation with real implementation containing database logic
 class TransactionRepository(ITransactionRepository):
     def __init__(self, db: SessionLocal):
         self.db = db
@@ -36,8 +36,7 @@ class TransactionRepository(ITransactionRepository):
     def list(self, user_id: UUID) -> list[Transaction]:
         return self.db.query(DBTransaction).filter(DBTransaction.userId == user_id).all()
 
-    def get_by_id(self, user_id: UUID, transaction_id: UUID) -> Transaction:
-        # TODO handle case where transaction is not found
+    def get_by_id(self, user_id: UUID, transaction_id: UUID) -> Transaction | None:
         return self.db.query(DBTransaction).filter(DBTransaction.userId == user_id,
                                                    DBTransaction.id == transaction_id).first()
 
@@ -57,8 +56,9 @@ class TransactionRepository(ITransactionRepository):
         return db_transaction
 
     def update(self, user_id: UUID, transaction_id: UUID, update: UpdateTransaction) -> Transaction:
-        # TODO handle case where transaction is not found
         db_transaction = self.get_by_id(user_id, transaction_id)
+        if not db_transaction:
+            raise ModelNotFoundError("Transaction", str(transaction_id))
 
         db_transaction.amount = update.amount
         db_transaction.date = update.date
@@ -71,10 +71,9 @@ class TransactionRepository(ITransactionRepository):
         return db_transaction
 
     def delete(self, user_id: UUID, transaction_id: UUID) -> None:
-        # TODO handle case where transaction is not found
-        db_transaction = self.get_by_id(user_id, transaction_id)
-
-        self.db.delete(db_transaction)
+        stmt = DBTransaction.__table__.delete().where(DBTransaction.userId == user_id,
+                                                      DBTransaction.id == transaction_id)
+        self.db.execute(stmt)
         self.db.commit()
 
 
