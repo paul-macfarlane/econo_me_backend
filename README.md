@@ -1,6 +1,10 @@
 # EconoMe Backend
 
-Backend for the EconoMe Project.
+Backend for the EconoMe Project. This is just a simple API that allows users to create and manage their own budgets.
+
+I built this to familiarize myself with Python and to learn more about FastAPI.
+
+The project uses FastAPI for the API, SQLAlchemy for the ORM, and Alembic for database migrations.
 
 ## Getting Started
 
