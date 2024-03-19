@@ -6,12 +6,14 @@ from app.models.errors import ModelNotFoundException, UnauthenticatedErrorExcept
     ResourceAlreadyExistsException
 from app.routers.auth import router as auth_router
 from app.routers.transactions import router as transactions_router
+from app.routers.categories import router as categories_router
 
 app = FastAPI()
 
 api_v1_router = APIRouter(prefix="/api/v1")
 api_v1_router.include_router(auth_router, prefix="/auth", tags=["auth"])
 api_v1_router.include_router(transactions_router, prefix="/transactions", tags=["transactions"])
+api_v1_router.include_router(categories_router, prefix="/categories", tags=["categories"])
 
 app.include_router(api_v1_router)
 

@@ -40,6 +40,9 @@ following:
 alembic upgrade head
 ```
 
+It is also recommended to run the seed SQL scripts on the database to populate it with some initial data.
+See [seeds](./seeds) for scripts.
+
 Finally, to start the API locally, navigate back up to the root directory and run the following:
 
 ```shell

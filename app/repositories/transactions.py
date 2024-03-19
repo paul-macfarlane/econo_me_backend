@@ -60,10 +60,17 @@ class TransactionRepository(ITransactionRepository):
         if not db_transaction:
             raise ModelNotFoundException("Transaction", str(transaction_id))
 
-        db_transaction.amount = update.amount
-        db_transaction.date = update.date
-        db_transaction.categoryId = update.categoryId
-        db_transaction.description = update.description
+        if update.amount is not None:
+            db_transaction.amount = update.amount
+
+        if update.date is not None:
+            db_transaction.date = update.date
+
+        if update.categoryId is not None:
+            db_transaction.categoryId = update.categoryId
+
+        if update.description is not None:
+            db_transaction.description = update.description
 
         self.db.commit()
         self.db.refresh(db_transaction)

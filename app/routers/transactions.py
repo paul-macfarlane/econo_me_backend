@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
 
-from app.auth.token import oauth2_scheme
 from app.auth.users import get_current_user
 from app.models.transactions import Transaction, CreateTransaction, UpdateTransaction
 from app.models.users import User

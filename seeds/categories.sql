@@ -1,0 +1,16 @@
+insert into categories (name, type)
+values ('Groceries', 'Expense'),
+       ('Rent', 'Expense'),
+       ('Utilities', 'Expense'),
+       ('Transportation', 'Expense'),
+       ('Entertainment', 'Expense'),
+       ('Health', 'Expense'),
+       ('Insurance', 'Expense'),
+       ('Education', 'Expense'),
+       ('Savings', 'Expense'),
+       ('Income', 'Income'),
+       ('Gifts', 'Income'),
+       ('Investments', 'Income'),
+       ('Other', 'Income'),
+       ('Other', 'Expense'),
+       ('Other', 'Income');

@@ -3,15 +3,14 @@ from sqlalchemy.dialects.postgresql import UUID
 from app.database.db import Base
 from sqlalchemy.orm import relationship
 
-import uuid
-
 
 class Transaction(Base):
     __tablename__ = "transactions"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid())
     amount = Column(Float, nullable=False)
     date = Column(String, nullable=False)
-    categoryId = Column(UUID, nullable=False, name="category_id")
+    categoryId = Column(UUID, ForeignKey("categories.id"), nullable=False, name="category_id")
+    category = relationship("Category", back_populates="transactions")
     userId = Column(UUID, ForeignKey("users.id"), nullable=False, name="user_id")
     user = relationship("User", back_populates="transactions")
     description = Column(String, nullable=False)
