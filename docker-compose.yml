@@ -1,6 +1,8 @@
+# This is for local development so devs don't need to install postgres on their local machine.
+
 version: "3.8"
 services:
-  postgres:
+  db:
     image: postgres:latest
     environment:
       POSTGRES_DB: postgres
@@ -10,6 +12,17 @@ services:
       - "9999:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+# uncomment this if you want to run the app in a container locally as well
+#  app:
+#    build: .
+#    ports:
+#      - "8000:80"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - db
+#    command: /bin/bash -c "cd app && alembic upgrade head && cd .. && uvicorn app.main:app --host 0.0.0.0 --port 80"
 
 volumes:
   postgres_data:
